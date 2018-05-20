@@ -13,6 +13,7 @@ Requirements
 * python 3.6+
 * tesseract-ocr (https://github.com/tesseract-ocr/tesseract)
 * imagemagick
+* nltk
 
 I recommend using virtualenv/virtualenvwrapper to install/manage the python modules.
 
