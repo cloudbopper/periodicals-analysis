@@ -17,22 +17,28 @@ def main():
         raise NotImplementedError("PNG support requires handling multiple image file per input PDF")
     # Find files
     paths = [line[2:] for line in subprocess.check_output("find . -iname '*.pdf'", shell=True).splitlines()]
-    print "Number of input PDFs: %d" % len(paths)
+    print("Number of input PDFs: %d" % len(paths))
     # Process files
     processed_files = set()
     for idx, pdf_filename in enumerate(paths):
-        print "Processing PDF %d of %d: %s" % (idx + 1, len(paths), pdf_filename)
+        print("Processing PDF %d of %d: %s" % (idx + 1, len(paths), pdf_filename))
         assert pdf_filename not in processed_files
         processed_files.add(pdf_filename)
         basename = os.path.basename(pdf_filename)
         header = os.path.splitext(basename)[0]
+        # Convert image
         image_filename = "%s/%s.%s" % (args.output_dir, header, args.image_type)
         cmd = "convert -density 300 '%s' -colorspace gray -depth 8 -strip -background white -alpha off '%s'" % (pdf_filename, image_filename)
-        print cmd
+        print(cmd)
         subprocess.check_call(cmd, shell=True)
+        # Run OCR
         txt_header = "%s/%s" % (args.output_dir, header)
         cmd = "tesseract '%s' -l eng '%s'" % (image_filename, txt_header)
-        print cmd
+        print(cmd)
+        subprocess.check_call(cmd, shell=True)
+        # Remove image
+        cmd = "rm '%s'" % image_filename
+        print(cmd)
         subprocess.check_call(cmd, shell=True)
 
 if __name__ == "__main__":

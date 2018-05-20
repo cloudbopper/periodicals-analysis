@@ -1,4 +1,4 @@
 Requirements:
-- python 2.7.14
+- python 3.6+
 - tesseract-ocr
 - imagemagick
