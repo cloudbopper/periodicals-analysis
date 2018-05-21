@@ -32,7 +32,7 @@ Add '-e' for an editable install.
 Running
 -------
 
-* Preprocessing OCR-ed text
+Preprocessing OCR-ed text
 
     python -m perysis.preprocess -input_dir documents_raw -output_dir documents_processed
 
