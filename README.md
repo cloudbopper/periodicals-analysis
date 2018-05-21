@@ -26,6 +26,7 @@ Use [Pip](https://pip.pypa.io/) to install directly from GitHub.
 
     pip install git+https://github.com/cloudbopper/perysis.git@master#egg=perysis
 
+Add '-e' for an editable install.
 
 
 Running
