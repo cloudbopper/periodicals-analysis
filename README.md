@@ -18,6 +18,15 @@ Requirements
 I recommend using virtualenv/virtualenvwrapper to install/manage the python modules.
 
 
+
+Install
+-------
+
+Use [Pip](https://pip.pypa.io/) to install directly from GitHub.
+
+    pip install git+https://github.com/cloudbopper/perysis.git@master#egg=perysis
+
+
 License
 -------
 
