@@ -27,6 +27,15 @@ Use [Pip](https://pip.pypa.io/) to install directly from GitHub.
     pip install git+https://github.com/cloudbopper/perysis.git@master#egg=perysis
 
 
+
+Running
+-------
+
+* Preprocessing OCR-ed text
+
+    python -m perysis.preprocess -input_dir documents_raw -output_dir documents_processed
+
+
 License
 -------
 
