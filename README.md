@@ -14,6 +14,9 @@ Requirements
 * tesseract-ocr (https://github.com/tesseract-ocr/tesseract)
 * imagemagick
 * nltk
+* scikit-learn
+* jupyter
+* pyLDAvis (for visualizing models)
 
 I recommend using virtualenv/virtualenvwrapper to install/manage the python modules.
 
