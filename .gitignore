@@ -9,3 +9,4 @@ logs
 *.pkl
 .ipynb_checkpoints/
 documents_processed/
+archive/
