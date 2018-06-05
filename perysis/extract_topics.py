@@ -11,7 +11,7 @@ import pickle
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.decomposition import LatentDirichletAllocation, NMF
 
-from .load_documents import load_documents
+from .load_documents import load_documents, DATA
 
 # pylint: disable = invalid-name
 
@@ -38,14 +38,14 @@ def pipeline(args, logger):
     """extract_topics pipeline"""
     logger.info("Begin extract_topics pipeline")
     documents = load_documents(args.input_dir)
-    data = [document.data for document in documents]
-    dtm_tf, dtm_tfidf = gen_document_term_matrices(args, data)
-    gen_models(args, logger, dtm_tf, dtm_tfidf)
+    dtm_tf, dtm_tfidf = gen_document_term_matrices(args, documents[DATA])
+    models = gen_models(args, logger, dtm_tf, dtm_tfidf)
     logger.info("End extract_topics pipeline")
 
 
 def gen_models(args, logger, dtm_tf, dtm_tfidf):
     """Generates and outputs topic models"""
+    models = []
 
     # Non-negative Matrix Factorization (NMF) model with Frobenius norm
     logger.info("Generating NMF model with Frobenius norm")
@@ -54,14 +54,16 @@ def gen_models(args, logger, dtm_tf, dtm_tfidf):
     with open("%s/nmf_frobenius.pkl" % args.output_dir, "wb") as model_file:
         pickle.dump(W, model_file)
         pickle.dump(nmf_frobenius, model_file)
+    models.append((W, nmf_frobenius))
 
     # NMF model with Kullback-Leibler (KL) divergence
     logger.info("Generating NMF model with KL divergence")
-    nmf_kl = NMF(n_components=args.num_topics, random_state=1, beta_loss='kullback-leibler', solver='mu', max_iter=100, alpha=.1, l1_ratio=.3)
+    nmf_kl = NMF(n_components=args.num_topics, random_state=1, beta_loss="kullback-leibler", solver="mu", alpha=.1, l1_ratio=.3)
     W = nmf_kl.fit_transform(dtm_tfidf)
     with open("%s/nmf_kl.pkl" % args.output_dir, "wb") as model_file:
         pickle.dump(W, model_file)
         pickle.dump(nmf_kl, model_file)
+    models.append((W, nmf_kl))
 
     # Latent Dirichlet Allocation (LDA) model with TF
     # http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.LatentDirichletAllocation.html
@@ -71,6 +73,8 @@ def gen_models(args, logger, dtm_tf, dtm_tfidf):
     with open("%s/lda_tf.pkl" % args.output_dir, "wb") as model_file:
         pickle.dump(W, model_file)
         pickle.dump(lda_tf, model_file)
+    models.append((W, lda_tf))
+    return models
 
 
 def gen_document_term_matrices(args, data):
@@ -95,8 +99,5 @@ def gen_document_term_matrices(args, data):
     return dtm_tf, dtm_tfidf
 
 
-#def per_periodical_analysis(documents, model):
-#    """Analyze models per periodical"""
-#    periodicals = {periodical: [doc for doc in periodicals where 
 if __name__ == "__main__":
     main()
