@@ -6,3 +6,6 @@ logs
 *egg-info/
 *.txt
 *.log
+*.pkl
+.ipynb_checkpoints/
+documents_processed/
